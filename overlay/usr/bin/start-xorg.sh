@@ -24,29 +24,29 @@ if [ $(grep autostart /etc/supervisor.d/udev.ini 2> /dev/null) == "autostart=tru
     wait_for_udev
 fi
 # Run X server
-/usr/bin/Xorg \
-    -ac \
-    -noreset \
-    -novtswitch \
-    -sharevts \
-    +extension RANDR \
-    +extension RENDER \
-    +extension GLX \
-    +extension XVideo \
-    +extension DOUBLE-BUFFER \
-    +extension SECURITY \
-    +extension DAMAGE \
-    +extension X-Resource \
-    -extension XINERAMA -xinerama \
-    +extension Composite +extension COMPOSITE \
-    -dpms \
-    -s off \
-    -nolisten tcp \
-    -iglx \
-    -verbose \
-    vt7 "${DISPLAY:?}" &
-xorg_pid=$!
+# /usr/bin/Xorg \
+#     -ac \
+#     -noreset \
+#     -novtswitch \
+#     -sharevts \
+#     +extension RANDR \
+#     +extension RENDER \
+#     +extension GLX \
+#     +extension XVideo \
+#     +extension DOUBLE-BUFFER \
+#     +extension SECURITY \
+#     +extension DAMAGE \
+#     +extension X-Resource \
+#     -extension XINERAMA -xinerama \
+#     +extension Composite +extension COMPOSITE \
+#     -dpms \
+#     -s off \
+#     -nolisten tcp \
+#     -iglx \
+#     -verbose \
+#     vt7 "${DISPLAY:?}" &
+# xorg_pid=$!
 
 
-# WAIT FOR CHILD PROCESS:
-wait "$xorg_pid"
+# # WAIT FOR CHILD PROCESS:
+# wait "$xorg_pid"

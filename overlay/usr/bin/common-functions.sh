@@ -24,6 +24,20 @@ wait_for_x() {
     done
 }
 
+# Wait for wayland server to start
+wait_for_wayland() {
+    MAX=60
+    CT=0
+    while ! WAYLAND_DISPLAY=$WAYLAND_DISPLAY xset q >/dev/null 2>&1; do
+        sleep 0.50s
+        CT=$(( CT + 1 ))
+        if [ "$CT" -ge "$MAX" ]; then
+            echo "FATAL: $0: Gave up waiting for Wayland server $WAYLAND_DISPLAY"
+            exit 11
+        fi
+    done
+}
+
 # Wait for udev init to complete
 wait_for_udev() {
     MAX=10

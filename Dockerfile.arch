@@ -193,34 +193,84 @@ RUN \
     && \
     echo
 
-# Install audio requirements
+# Install Wayland requirements
 ENV \
-    PULSE_SOCKET_DIR="/tmp/pulse" \
-    PULSE_SERVER="unix:/tmp/pulse/pulse-socket"
+    WAYLAND_DISPLAY="wayland-0"
 RUN \
-    echo "**** Install X Server requirements ****" \
-	    && pacman -Syu --noconfirm --needed \
-            alsa-utils \
-            pavucontrol \
-            pulseaudio \
-            pulseaudio-alsa \
+    echo "**** Install Wayland requirements ****" \
+        && pacman -Syu --noconfirm --needed \
+            wayland \
+            wayland-protocols \
+            wayvnc \
+            xorg-xwayland \
+            gamescope \
     && \
     echo "**** Section cleanup ****" \
-	    && pacman -Scc --noconfirm \
+        && pacman -Scc --noconfirm \
         && rm -fr /var/lib/pacman/sync/* \
         && rm -fr /var/cache/pacman/pkg/* \
     && \
     echo
 
+# Install Pipewire requirements
+ENV \
+    PIPEWIRE_SOCKET_DIR="/tmp/pipewire-0" \
+    PIPEWIRE_CONFIG_DIR="/etc/pipewire" \
+    PIPEWIRE_CONFIG_FILE="/etc/pipewire/pipewire.conf"
+RUN \
+    echo "**** Install Pipewire requirements ****" \
+        && pacman -Syu --noconfirm --needed \
+            pipewire \
+            pipewire-alsa \
+            pipewire-jack \
+            pipewire-pulse \
+            pipewire-zeroconf \
+            pipewire-media-session \
+            pipewire-pulseaudio \
+            pipewire-jack-dropin \
+            pipewire-alsa-dropin \
+            pipewire-zeroconf-dropin \
+            pipewire-media-session-dropin \
+            pipewire-pulseaudio-dropin \
+    && \
+    echo "**** Section cleanup ****" \
+        && pacman -Scc --noconfirm \
+        && rm -fr /var/lib/pacman/sync/* \
+        && rm -fr /var/cache/pacman/pkg/* \
+    && \
+    echo
+# Install audio requirements
+# ENV \
+#     PULSE_SOCKET_DIR="/tmp/pulse" \
+#     PULSE_SERVER="unix:/tmp/pulse/pulse-socket"
+# RUN \
+#     echo "**** Install X Server requirements ****" \
+# 	    && pacman -Syu --noconfirm --needed \
+#             alsa-utils \
+#             pavucontrol \
+#             pulseaudio \
+#             pulseaudio-alsa \
+#     && \
+#     echo "**** Section cleanup ****" \
+# 	    && pacman -Scc --noconfirm \
+#         && rm -fr /var/lib/pacman/sync/* \
+#         && rm -fr /var/cache/pacman/pkg/* \
+#     && \
+#     echo
+
+# Install tool to access the AUR
+
+
 # Install desktop environment
 # TODO: Install equivelent of 'msttcorefonts' and 'fonts-vlgothic'
 RUN \
     echo "**** Install desktop environment ****" \
+    && su - default -c "yay -Syu --noconfirm --needed wayfire wf-config" \
+    && \
+    echo "**** Install desktop environment extras ****" \
 	    && pacman -Syu --noconfirm --needed \
             gedit \
-            xfce4 \
-            xfce4-goodies \
-            xfce4-terminal \
+            gnome-terminal \
             ttf-liberation \
             xdg-user-dirs \
             xdg-utils \
@@ -235,6 +285,7 @@ RUN \
 	    && pacman -Scc --noconfirm \
         && rm -fr /var/lib/pacman/sync/* \
         && rm -fr /var/cache/pacman/pkg/* \
+        && rm -rf /tmp/yay* \
     && \
     echo
 
